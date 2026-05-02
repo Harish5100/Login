@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="main-container">
+        <div class="header">
+            <h1>Admin Dashboard</h1>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-success" onclick="window.location.href='../RESULT/result.html'" style="margin-top: 0; width: auto;">View Leaderboard</button>
+                <button class="btn-primary" onclick="window.location.href='quiz_settings.html'">Quiz Settings</button>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <div class="grid-layout">
+            <!-- Student List Card -->
+            <div class="card glass-panel">
+                <div class="card-header">
+                    <h2>Student Performance</h2>
+                    <p>Overview of student activity and test results.</p>
+                </div>
+
+                <div class="table-container">
+                    <table id="students-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Last Login</th>
+                                <th>Time Spent (s)</th>
+                                <th>Latest Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-list-body">
+                            <!-- Dynamically populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <script>
+                const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:'
+                    ? 'http://127.0.0.1:5000'
+                    : window.location.origin;
+                let allStudents = [];
+
+                // Check auth
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                if (!user || user.role !== 'admin') {
+                    window.location.href = '../index.html';
+                }
+
+                function formatTime(seconds) {
+                    if (seconds < 60) return `${seconds}s`;
+                    const mins = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    return secs > 0 ? `${mins}m ${secs}s` : `${mins}m`;
+                }
+
+                function logout() {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = '../index.html';
+                }
+
+                async function loadStudentData() {
+                    try {
+                        const res = await fetch(`${API_BASE}/api/users`);
+                        allStudents = await res.json();
+                        const tbody = document.getElementById('student-list-body');
+                        tbody.innerHTML = '';
+
+                        allStudents.forEach(student => {
+                            tbody.innerHTML += `
+                    <tr>
+                        <td><a href="../QUIZ/dashboard.html?username=${student.username}" style="color: #3b82f6; text-decoration: none; font-weight: bold;">${student.username}</a></td>
+                        <td>${student.lastLogin}</td>
+                        <td>${formatTime(student.timeSpent)}</td>
+                        <td><span class="score-badge">${student.score}</span></td>
+                    </tr>
+                `;
+                        });
+                    } catch (e) {
+                        console.error("Failed to load students", e);
+                    }
+                }
+
+
+
+                window.onload = () => {
+                    loadStudentData();
+                };
+            </script>
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quiz Settings</title>
+    <link rel="stylesheet" href="admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+<div class="main-container">
+    <div class="header" style="justify-content: space-between; align-items: center;">
+        <h1 style="margin: 0;">Quiz Settings</h1>
+        <button class="btn-primary" onclick="window.location.href='admin.html'">Back to Dashboard</button>
+    </div>
+
+    <!-- Quiz Settings Card -->
+    <div class="card glass-panel" style="max-width: 800px; margin: 0 auto;">
+        <div class="card-header">
+            <h2>Quiz Configuration</h2>
+            <p>Configure the test time and questions.</p>
+            <button class="btn-primary" onclick="saveSettings()">Save Configuration</button>
+        </div>
+        
+        <div class="settings-group">
+            <label><strong>Time Limit (seconds):</strong></label>
+            <input type="number" id="quiz-time" value="30" class="input-field" style="width: 100px;">
+        </div>
+        
+        <div class="settings-group">
+            <label><strong>Start Date & Time:</strong></label>
+            <input type="datetime-local" id="start-time" class="input-field">
+        </div>
+
+        <div class="settings-group">
+            <label><strong>End Date & Time:</strong></label>
+            <input type="datetime-local" id="end-time" class="input-field">
+        </div>
+
+        <h3>Questions Manager</h3>
+        <div id="questions-list" class="questions-container">
+            <!-- Questions will be dynamically loaded here -->
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button onclick="addQuestion()" class="btn-success">+ Add New Question</button>
+            <button onclick="saveSettings()" class="btn-primary">Set Question</button>
+        </div>
+        <p id="status-message" class="status-msg"></p>
+    </div>
+</div>
+
+<script>
+    let quizData = { time: 30, questions: [] };
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:'
+        ? 'http://127.0.0.1:5000'
+        : window.location.origin;
+
+    // Check auth
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (!user || user.role !== 'admin') {
+        window.location.href = '../index.html';
+    }
+
+    async function loadSettings() {
+        try {
+            const res = await fetch(`${API_BASE}/api/quiz-data`);
+            quizData = await res.json();
+            document.getElementById('quiz-time').value = quizData.time || 30;
+            if (quizData.startTime) document.getElementById('start-time').value = quizData.startTime;
+            if (quizData.endTime) document.getElementById('end-time').value = quizData.endTime;
+            renderQuestions();
+        } catch (e) {
+            console.error("Failed to load quiz settings", e);
+            showStatus("Failed to connect to backend.", "error");
+        }
+    }
+
+    function renderQuestions() {
+        const container = document.getElementById('questions-list');
+        container.innerHTML = '';
+        
+        quizData.questions.forEach((q, index) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question-item glass-panel-inner';
+            
+            let html = `
+                <div class="q-header">
+                    <strong>Question ${index + 1}</strong>
+                    <button class="btn-danger" onclick="removeQuestion(${index})">Remove</button>
+                </div>
+                <input type="text" class="input-field full-width" value="${q.question}" onchange="updateQuestionText(${index}, this.value)">
+                <div class="options-list">
+            `;
+            
+            q.options.forEach((opt, oIndex) => {
+                html += `
+                    <div class="option-item">
+                        <input type="radio" name="correct_${index}" ${opt.isCorrect ? 'checked' : ''} onchange="setCorrectOption(${index}, ${oIndex})">
+                        <input type="text" class="input-field" value="${opt.text}" onchange="updateOptionText(${index}, ${oIndex}, this.value)">
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            qDiv.innerHTML = html;
+            container.appendChild(qDiv);
+        });
+    }
+
+    function updateQuestionText(qIndex, val) { quizData.questions[qIndex].question = val; }
+    function updateOptionText(qIndex, oIndex, val) { quizData.questions[qIndex].options[oIndex].text = val; }
+    function setCorrectOption(qIndex, oIndex) {
+        quizData.questions[qIndex].options.forEach((opt, idx) => {
+            opt.isCorrect = (idx === oIndex);
+        });
+    }
+
+    function removeQuestion(index) {
+        quizData.questions.splice(index, 1);
+        renderQuestions();
+    }
+
+    function addQuestion() {
+        quizData.questions.push({
+            question: "New Question",
+            options: [
+                { text: "Option 1", isCorrect: true },
+                { text: "Option 2", isCorrect: false },
+                { text: "Option 3", isCorrect: false },
+                { text: "Option 4", isCorrect: false }
+            ]
+        });
+        renderQuestions();
+    }
+
+    function showStatus(msg, type) {
+        const el = document.getElementById('status-message');
+        el.innerText = msg;
+        el.className = 'status-msg ' + type;
+        setTimeout(() => el.innerText = "", 3000);
+    }
+
+    async function saveSettings() {
+        const timeInput = parseInt(document.getElementById('quiz-time').value) || 30;
+        quizData.time = timeInput;
+        quizData.startTime = document.getElementById('start-time').value;
+        quizData.endTime = document.getElementById('end-time').value;
+        
+        try {
+            const res = await fetch(`${API_BASE}/api/quiz-data`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(quizData)
+            });
+            
+            if (res.ok) {
+                showStatus("Settings saved successfully!", "success");
+            } else {
+                throw new Error("Server error");
+            }
+        } catch (e) {
+            showStatus("Failed to save settings.", "error");
+        }
+    }
+
+    window.onload = () => {
+        loadSettings();
+    };
+</script>
+</body>
+</html>
