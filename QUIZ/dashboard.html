@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="../Admin/admin.css"> <!-- Reusing admin styles for consistency -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+<div class="main-container" style="max-width: 800px;">
+    <div class="header">
+        <h1 id="dashboard-title">Student Dashboard</h1>
+        <button id="header-btn" class="logout-btn" onclick="handleHeaderAction()">Logout</button>
+    </div>
+
+    <div class="glass-panel" style="margin-bottom: 30px;">
+        <h2 id="welcome-msg" style="margin-bottom: 20px; font-size: 24px;">Welcome</h2>
+        <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+            <div class="glass-panel-inner" style="flex: 1; text-align: center; cursor: pointer; transition: transform 0.2s;" onclick="openChartModal()" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                <h3 style="color: #94a3b8; font-size: 14px; margin-bottom: 10px;">Total Time Spent (Click for Chart)</h3>
+                <p id="total-time" style="font-size: 28px; font-weight: bold; color: #3b82f6;">0 mins</p>
+            </div>
+            <div class="glass-panel-inner" style="flex: 1; text-align: center;">
+                <h3 style="color: #94a3b8; font-size: 14px; margin-bottom: 10px;">Latest Score</h3>
+                <p id="latest-score" style="font-size: 28px; font-weight: bold; color: #10b981;">0</p>
+            </div>
+        </div>
+
+        <div id="action-buttons" style="display: flex; gap: 15px;">
+            <button id="start-btn" class="btn-primary" style="flex: 1; padding: 15px; font-size: 18px;" onclick="startAssessment()">Start Assessment</button>
+            <button class="btn-success" style="flex: 1; margin-top: 0; padding: 15px; font-size: 18px;" onclick="window.location.href='../RESULT/result.html'">View Leaderboard</button>
+        </div>
+        <p id="schedule-msg" style="text-align: center; color: #f87171; font-weight: bold; margin-top: 15px;"></p>
+
+        <div style="margin-top: 30px;">
+            <h3 style="font-size: 18px; margin-bottom: 10px; color: #f8fafc;">Past Attempts</h3>
+            <div style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px;">
+                <table style="width: 100%; text-align: left; border-collapse: collapse; color: white;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                            <th style="padding: 10px;">Date</th>
+                            <th style="padding: 10px;">Score</th>
+                            <th style="padding: 10px;">Time Spent</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <tr><td colspan="3" style="text-align: center; padding: 10px;">No attempts yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart Modal -->
+<div id="chart-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+    <div class="glass-panel" style="width: 90%; max-width: 600px; position: relative;">
+        <button onclick="closeChartModal()" style="position: absolute; right: 20px; top: 20px; background: transparent; border: none; color: white; font-size: 20px; cursor: pointer;">&times;</button>
+        <h3 style="margin-bottom: 20px;">Daily Time Spent</h3>
+        <canvas id="timeChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewUser = urlParams.get('username');
+    
+
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (!user) {
+        window.location.href = '../index.html';
+    }
+
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:'
+        ? 'http://127.0.0.1:5000'
+        : window.location.origin;
+    let targetUsername = user.username;
+    let isAdminView = false;
+
+    if (user.role === 'admin' && viewUser) {
+        isAdminView = true;
+        targetUsername = viewUser;
+        document.getElementById('action-buttons').style.display = 'none';
+        document.getElementById('dashboard-title').innerText = `${targetUsername}'s Dashboard`;
+        const headerBtn = document.getElementById('header-btn');
+        headerBtn.innerText = 'Back to Admin';
+        headerBtn.className = 'btn-primary';
+    } else if (user.role !== 'student') {
+        window.location.href = '../index.html';
+    }
+
+    document.getElementById('welcome-msg').innerText = isAdminView ? `Viewing ${targetUsername}'s test` : `Welcome, ${targetUsername}!`;
+    
+    let quizSchedule = null;
+    let studentData = null;
+    let timeChart = null;
+
+    function formatTime(seconds) {
+        if (seconds < 60) return `${seconds}s`;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return secs > 0 ? `${mins}m ${secs}s` : `${mins}m`;
+    }
+
+    async function loadStatsAndSchedule() {
+        try {
+            const res = await fetch(`${API_BASE}/api/users`);
+            const students = await res.json();
+            const myStat = students.find(s => s.username === targetUsername);
+            if (myStat) {
+                studentData = myStat;
+                document.getElementById('total-time').innerText = formatTime(myStat.timeSpent);
+                document.getElementById('latest-score').innerText = myStat.score;
+                
+                // Load history
+                if (myStat.history && myStat.history.length > 0) {
+                    const tbody = document.getElementById('history-body');
+                    tbody.innerHTML = '';
+                    myStat.history.slice().reverse().forEach(h => {
+                        tbody.innerHTML += `
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <td style="padding: 10px;">${h.date}</td>
+                                <td style="padding: 10px;"><span style="color: #10b981; font-weight: bold;">${h.score}</span></td>
+                                <td style="padding: 10px;">${formatTime(h.timeSpent)}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            }
+            
+            // Load schedule if not admin view
+            if (!isAdminView) {
+                const quizRes = await fetch(`${API_BASE}/api/quiz-data`);
+                quizSchedule = await quizRes.json();
+                checkSchedule();
+            } else {
+                document.getElementById('schedule-msg').style.display = 'none';
+            }
+        } catch (e) {
+            console.error("Failed to load stats or schedule", e);
+        }
+    }
+
+    function openChartModal() {
+        document.getElementById('chart-modal').style.display = 'flex';
+        
+        if (!studentData || !studentData.dailyTime) return;
+        
+        const ctx = document.getElementById('timeChart').getContext('2d');
+        const labels = Object.keys(studentData.dailyTime);
+        const data = Object.values(studentData.dailyTime); // Keep in seconds
+        
+        if (timeChart) timeChart.destroy();
+        
+        timeChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Seconds Spent',
+                    data: data,
+                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: 'white' } }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                }
+            }
+        });
+    }
+
+    function closeChartModal() {
+        document.getElementById('chart-modal').style.display = 'none';
+    }
+
+    function checkSchedule() {
+        const btn = document.getElementById('start-btn');
+        const msgEl = document.getElementById('schedule-msg');
+        
+        if (quizSchedule && quizSchedule.startTime && quizSchedule.endTime) {
+            const now = new Date();
+            const start = new Date(quizSchedule.startTime);
+            const end = new Date(quizSchedule.endTime);
+            
+            if (now < start) {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+                msgEl.innerText = `Test has not started yet. Opens at: ${start.toLocaleString()}`;
+            } else if (now > end) {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+                msgEl.innerText = `Test has ended.`;
+            } else {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+                msgEl.innerText = `Test is active until: ${end.toLocaleString()}`;
+                msgEl.style.color = '#34d399';
+            }
+        }
+    }
+
+    function handleHeaderAction() {
+        if (isAdminView) {
+            window.location.href = '../Admin/admin.html';
+        } else {
+            localStorage.removeItem('currentUser');
+            window.location.href = '../index.html';
+        }
+    }
+
+    function startAssessment() {
+        if (document.getElementById('start-btn').disabled) return;
+        localStorage.setItem('assessmentStartTime', Date.now());
+        window.location.href = 'st.html';
+    }
+
+    window.onload = loadStatsAndSchedule;
+    setInterval(checkSchedule, 60000); // Re-check every minute
+</script>
+</body>
+</html>

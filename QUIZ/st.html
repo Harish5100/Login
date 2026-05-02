@@ -1,1 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Aptitude Test</title>
+<link rel="stylesheet" href="st.css">
+</head>
+<body>
+    <div class = "con">
+        Welcome to the Digital Aptitude Test
+    </div>
 
+<div class="container">
+    <h1>Digital Aptitude Test</h1>
+
+    <div id="quiz">
+        <h2 id="question">Loading...</h2>
+        <div id="options"></div>
+        <button id="next-btn" class="hidden" onclick="nextQuestion()" style="margin-top: 15px; width: 100%; padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">Next Question</button>
+
+        <div class="info">
+            <span id="timer">30s</span>
+            <span id="score">Score: 0</span>
+        </div>
+    </div>
+
+    <div id="result" class="hidden">
+        <h2 id="final-score"></h2>
+        <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0;">
+            <div style="background: rgba(16, 185, 129, 0.2); padding: 10px 20px; border-radius: 10px; color: #34d399;">
+                <div style="font-size: 14px;">Correct</div>
+                <div id="correct-count" style="font-size: 24px; font-weight: bold;">0</div>
+            </div>
+            <div style="background: rgba(239, 68, 68, 0.2); padding: 10px 20px; border-radius: 10px; color: #f87171;">
+                <div style="font-size: 14px;">Wrong</div>
+                <div id="wrong-count" style="font-size: 24px; font-weight: bold;">0</div>
+            </div>
+            <div style="background: rgba(148, 163, 184, 0.2); padding: 10px 20px; border-radius: 10px; color: #cbd5e1;">
+                <div style="font-size: 14px;">Unanswered</div>
+                <div id="unanswered-count" style="font-size: 24px; font-weight: bold;">0</div>
+            </div>
+        </div>
+        <p id="feedback"></p>
+        <button onclick="restartQuiz()">Restart</button>
+    </div>
+</div>
+    <script src="st.js"></script>
+
+</body>
+</html>
