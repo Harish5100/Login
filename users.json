@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "username": "admin",
+      "password": "admin",
+      "role": "admin"
+    },
+    {
+      "username": "harish",
+      "password": "harish1234",
+      "role": "admin"
+    },
+    {
+      "username": "jack",
+      "password": "jack123",
+      "role": "student"
+    },
+    {
+      "username": "harish",
+      "password": "harish",
+      "role": "student"
+    },
+    {
+      "username": "hari",
+      "password": "hari",
+      "role": "student"
+    },
+    {
+      "username": "AK",
+      "password": "AK",
+      "role": "student"
+    },
+    {
+      "username": "devil",
+      "password": "devil",
+      "role": "student"
+    },
+    {
+      "username": "testuser",
+      "password": "testpass123",
+      "role": "student"
+    }
+  ]
+}

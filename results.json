@@ -1,0 +1,219 @@
+{
+  "results": [
+    {
+      "username": "hari",
+      "latestScore": 60,
+      "highScore": 100,
+      "totalTimeSpent": 279,
+      "lastLogin": "30 Apr, 01:40 PM",
+      "correct": 6,
+      "wrong": 4,
+      "unanswered": 0,
+      "dailyTime": {
+        "2026-04-30": 274
+      },
+      "history": [
+        {
+          "date": "30 Apr, 12:03 AM",
+          "score": 80,
+          "timeSpent": 61,
+          "correct": 8,
+          "wrong": 2,
+          "unanswered": 0
+        },
+        {
+          "date": "30 Apr, 08:58 AM",
+          "score": 90,
+          "timeSpent": 114,
+          "correct": 9,
+          "wrong": 0,
+          "unanswered": 1
+        },
+        {
+          "date": "30 Apr, 12:07 PM",
+          "score": 60,
+          "timeSpent": 83,
+          "correct": 6,
+          "wrong": 2,
+          "unanswered": 2
+        },
+        {
+          "date": "30 Apr, 01:40 PM",
+          "score": 60,
+          "timeSpent": 21,
+          "correct": 6,
+          "wrong": 4,
+          "unanswered": 0
+        }
+      ]
+    },
+    {
+      "username": "to",
+      "latestScore": 70,
+      "highScore": 70,
+      "totalTimeSpent": 104,
+      "lastLogin": "29 Apr, 11:21 PM",
+      "history": [
+        {
+          "date": "29 Apr, 11:21 PM",
+          "score": 70,
+          "timeSpent": 104,
+          "correct": 0,
+          "wrong": 0,
+          "unanswered": 0
+        }
+      ]
+    },
+    {
+      "username": "st",
+      "latestScore": 60,
+      "highScore": 100,
+      "totalTimeSpent": 104,
+      "lastLogin": "30 Apr, 08:36 AM",
+      "correct": 6,
+      "wrong": 4,
+      "unanswered": 0,
+      "dailyTime": {
+        "2026-04-28": 120,
+        "2026-04-29": 27,
+        "2026-04-30": 25
+      },
+      "history": [
+        {
+          "date": "29 Apr, 11:53 PM",
+          "score": 100,
+          "timeSpent": 79,
+          "correct": 10,
+          "wrong": 0,
+          "unanswered": 0
+        },
+        {
+          "date": "30 Apr, 08:36 AM",
+          "score": 60,
+          "timeSpent": 25,
+          "correct": 6,
+          "wrong": 4,
+          "unanswered": 0
+        }
+      ]
+    },
+    {
+      "username": "jack",
+      "latestScore": 90,
+      "highScore": 90,
+      "totalTimeSpent": 31,
+      "lastLogin": "30 Apr, 07:57 AM",
+      "correct": 9,
+      "wrong": 1,
+      "unanswered": 0,
+      "dailyTime": {
+        "2026-04-30": 31
+      },
+      "history": [
+        {
+          "date": "30 Apr, 07:57 AM",
+          "score": 90,
+          "timeSpent": 31,
+          "correct": 9,
+          "wrong": 1,
+          "unanswered": 0
+        }
+      ]
+    },
+    {
+      "username": "AK",
+      "latestScore": 100,
+      "highScore": 100,
+      "totalTimeSpent": 27,
+      "lastLogin": "30 Apr, 08:07 AM",
+      "correct": 10,
+      "wrong": 0,
+      "unanswered": 0,
+      "dailyTime": {
+        "2026-04-30": 27
+      },
+      "history": [
+        {
+          "date": "30 Apr, 08:07 AM",
+          "score": 100,
+          "timeSpent": 27,
+          "correct": 10,
+          "wrong": 0,
+          "unanswered": 0
+        }
+      ]
+    },
+    {
+      "username": "devil",
+      "latestScore": 60,
+      "highScore": 60,
+      "highScoreTime": 84,
+      "totalTimeSpent": 84,
+      "lastLogin": "30 Apr, 08:26 AM",
+      "correct": 6,
+      "wrong": 2,
+      "unanswered": 2,
+      "dailyTime": {
+        "2026-04-30": 84
+      },
+      "history": [
+        {
+          "date": "30 Apr, 08:26 AM",
+          "score": 60,
+          "timeSpent": 84,
+          "correct": 6,
+          "wrong": 2,
+          "unanswered": 2
+        }
+      ]
+    },
+    {
+      "username": "harish",
+      "latestScore": 80,
+      "highScore": 80,
+      "highScoreTime": 86,
+      "totalTimeSpent": 86,
+      "lastLogin": "30 Apr, 08:42 AM",
+      "correct": 8,
+      "wrong": 0,
+      "unanswered": 2,
+      "dailyTime": {
+        "2026-04-30": 86
+      },
+      "history": [
+        {
+          "date": "30 Apr, 08:42 AM",
+          "score": 80,
+          "timeSpent": 86,
+          "correct": 8,
+          "wrong": 0,
+          "unanswered": 2
+        }
+      ]
+    },
+    {
+      "username": "testuser",
+      "latestScore": 90,
+      "highScore": 90,
+      "highScoreTime": 182,
+      "totalTimeSpent": 182,
+      "lastLogin": "30 Apr, 02:03 PM",
+      "correct": 9,
+      "wrong": 1,
+      "unanswered": 0,
+      "dailyTime": {
+        "2026-04-30": 182
+      },
+      "history": [
+        {
+          "date": "30 Apr, 02:03 PM",
+          "score": 90,
+          "timeSpent": 182,
+          "correct": 9,
+          "wrong": 1,
+          "unanswered": 0
+        }
+      ]
+    }
+  ]
+}

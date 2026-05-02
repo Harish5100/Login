@@ -1,0 +1,217 @@
+{
+  "endTime": "2026-05-01T23:59",
+  "questions": [
+    {
+      "options": [
+        {
+          "isCorrect": false,
+          "text": "8"
+        },
+        {
+          "isCorrect": true,
+          "text": "7"
+        },
+        {
+          "isCorrect": false,
+          "text": "6"
+        },
+        {
+          "isCorrect": false,
+          "text": "Error"
+        }
+      ],
+      "question": "What is the output of print(3 + 4)?"
+    },
+    {
+      "options": [
+        {
+          "isCorrect": true,
+          "text": "print()"
+        },
+        {
+          "isCorrect": false,
+          "text": "echo()"
+        },
+        {
+          "isCorrect": false,
+          "text": "display()"
+        },
+        {
+          "isCorrect": false,
+          "text": "show()"
+        }
+      ],
+      "question": "Which function is used to display output in Python?"
+    },
+    {
+      "options": [
+        {
+          "isCorrect": false,
+          "text": ".txt"
+        },
+        {
+          "isCorrect": false,
+          "text": ".code"
+        },
+        {
+          "isCorrect": true,
+          "text": ".py"
+        },
+        {
+          "isCorrect": false,
+          "text": ".exe"
+        }
+      ],
+      "question": "Which file extension is used for Python scripts?"
+    },
+    {
+      "options": [
+        {
+          "isCorrect": false,
+          "text": "2value"
+        },
+        {
+          "isCorrect": true,
+          "text": "value_2"
+        },
+        {
+          "isCorrect": false,
+          "text": "value-2"
+        },
+        {
+          "isCorrect": false,
+          "text": "value 2"
+        }
+      ],
+      "question": "Which of these is a valid variable name in Python?"
+    },
+    {
+      "options": [
+        {
+          "isCorrect": false,
+          "text": "<class 'str'>"
+        },
+        {
+          "isCorrect": true,
+          "text": "<class 'float'>"
+        },
+        {
+          "isCorrect": false,
+          "text": "float"
+        },
+        {
+          "isCorrect": false,
+          "text": "<type 'float'>"
+        }
+      ],
+      "question": "What is the output of print(type(3.14))?"
+    },
+    {
+      "options": [
+        {
+          "isCorrect": false,
+          "text": "//"
+        },
+        {
+          "isCorrect": true,
+          "text": "#"
+        },
+        {
+          "isCorrect": false,
+          "text": "<!-- -->"
+        },
+        {
+          "isCorrect": false,
+          "text": "**"
+        }
+      ],
+      "question": "Which symbol is used to write a single-line comment in Python?"
+    },
+    {
+      "options": [
+        {
+          "isCorrect": false,
+          "text": "2.5"
+        },
+        {
+          "isCorrect": true,
+          "text": "2"
+        },
+        {
+          "isCorrect": false,
+          "text": "3"
+        },
+        {
+          "isCorrect": false,
+          "text": "Error"
+        }
+      ],
+      "question": "What is the output of print(5 // 2)?"
+    },
+    {
+      "options": [
+        {
+          "isCorrect": false,
+          "text": "int"
+        },
+        {
+          "isCorrect": true,
+          "text": "str"
+        },
+        {
+          "isCorrect": false,
+          "text": "list"
+        },
+        {
+          "isCorrect": false,
+          "text": "tuple"
+        }
+      ],
+      "question": "Which data type is used to store a sequence of characters?"
+    },
+    {
+      "options": [
+        {
+          "isCorrect": false,
+          "text": "True"
+        },
+        {
+          "isCorrect": true,
+          "text": "False"
+        },
+        {
+          "isCorrect": false,
+          "text": "1"
+        },
+        {
+          "isCorrect": false,
+          "text": "None"
+        }
+      ],
+      "question": "What is the output of print(bool(''))?"
+    },
+    {
+      "options": [
+        {
+          "isCorrect": true,
+          "text": "while"
+        },
+        {
+          "isCorrect": false,
+          "text": "loop"
+        },
+        {
+          "isCorrect": false,
+          "text": "repeat"
+        },
+        {
+          "isCorrect": false,
+          "text": "iterate"
+        }
+      ],
+      "question": "Which loop continues executing as long as a condition is true?"
+    }
+  ],
+  "startTime": "2026-05-01T00:00",
+  "time": 30
+}
